@@ -1,0 +1,12 @@
+#Output files
+*.pdf
+*.aux
+*.out
+*.toc
+*.log
+
+#KDE files
+.directory
+
+#Temp files
+*.kate-swp
