@@ -4,6 +4,7 @@
 *.out
 *.toc
 *.log
+build/
 
 #KDE files
 .directory
