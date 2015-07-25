@@ -1,31 +1,185 @@
 \documentclass[10pt,a4paper]{report}
 \usepackage[colorlinks=true,linkcolor=blue,bookmarks=false]{hyperref}
 \usepackage{amsfonts}
-\usepackage{amsmath}
+\usepackage[intlimits]{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{enumerate}
+\usepackage{tcolorbox}
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 
+\theoremstyle{definition}
+\newtheorem{tutorial}{Tutorial}[section]
+\newtheorem{example}{Example}[section]
+\theoremstyle{plain}
 
-\newcommand{\qed}{\nobreak \ifvmode \relax \else
-      \ifdim\lastskip<1.5em \hskip-\lastskip
-      \hskip1.5em plus0em minus0.5em \fi \nobreak
-      \vrule height0.75em width0.5em depth0.25em\fi}
+\newcommand{\dd}{\mathop{}\,\mathrm{d}}
+\newcommand{\ddns}{\mathrm{d}}
+\newcommand{\deriv}[2]{\dfrac{\dd #1}{\dd #2}}
+\newcommand{\parderiv}[2]{\dfrac{\partial #1}{\partial #2}}
+
+\newenvironment{problem}{\par\begin{tcolorbox}\textbf{Problem}\\*}{\end{tcolorbox}}
+\newenvironment{solution}{\par\textbf{Solution}\\*}{{\par\centering\rule{3cm}{.1pt}\par}}
+\newenvironment{colvector}{\left(\!\!\!\begin{array}{c}}{\end{array}\!\!\!\right)}
+
+%\newcommand{\qed}{\nobreak \ifvmode \relax \else
+%      \ifdim\lastskip<1.5em \hskip-\lastskip
+%      \hskip1.5em plus0em minus0.5em \fi \nobreak
+%      \vrule height0.75em width0.5em depth0.25em\fi}
       
 \newcommand{\me}{\mathrm{e}}
 \newcommand{\real}{\mathbb{R}}
+\newcommand{\mlet}{\text{let}\,}
 
 \begin{document}
 \parindent0pt
 
-\title{Advanced Analysis - Examples and Exercises}
+\title{Advanced Analysis - Examples and Tutorials}
 \date{\today}
 \maketitle
 
 \tableofcontents
+
+\chapter{Surface Integrals}
+\section{Surface Integrals}
+\begin{example}\ 
+    \begin{problem}
+        Consider a cone parametrised by:
+        \[
+            \vec{r}(u,v) =
+            \begin{colvector}
+                v\cos u\\
+                v\sin u\\
+                v
+            \end{colvector}\quad
+            u\in[0,2\pi],\,
+            v\in[0,1]
+        \]
+        with a distribution of mass per unit area given by $f(x,y) = 1-x$. Find the total mass of the cone.
+    \end{problem}
+    
+    \begin{solution}
+        We need to find
+        \[
+            \iint_S f\dd a
+        \]
+        \[\begin{array}{lcr}
+            \parderiv{\vec{r}}{u} =
+            \begin{colvector}
+                -v\sin u\\
+                v\cos u\\
+                0
+            \end{colvector}
+            &\qquad&
+            \parderiv{\vec{r}}{v} =
+            \begin{colvector}
+                \cos u\\
+                \sin u\\
+                1
+            \end{colvector}
+        \end{array}\]
+        \begin{eqnarray*}
+            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=&
+            \left|\left(\begin{array}{ccc}
+                \hat{i} & \hat{j} & \hat{k}\\
+                -v\sin u & v\cos u & 0\\
+                \cos u & \sin u & 1
+            \end{array}\right)\right|\\
+            &=&
+            \begin{colvector}
+                v\cos u\\
+                v\sin u\\
+                -v
+            \end{colvector}\\
+            \left\| \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} \right\| &=&
+            \sqrt{v^2\cos^2u + v^2\sin^2u + v^2}\\
+            &=&\sqrt2v
+        \end{eqnarray*}
+        
+        \begin{flalign*}
+            \iint_S f\dd a &= \iint_D f(\vec{r}) \left\| \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} \right\| \dd u\ddns v&&\\
+            &= \int_0^1 \int_{u=0}^{2\pi} (1-v\cos u)\sqrt2v \dd u\ddns v &&\\
+            &= \int_0^1 \int_{u=0}^{2\pi} \sqrt2v - \sqrt2v^2\cos u\dd u\ddns v &&\\
+            &= \sqrt2 \int_0^1 \left.uv - v^2\sin u\right|_{u=0}^{2\pi} \dd v &&\\
+            &= \sqrt2 \int_0^1 2\pi v\dd v &&\\
+            &= \left. \sqrt2\pi v^2\right|_0^1 &&\\
+            &= \sqrt2\pi
+        \end{flalign*}
+    \end{solution}
+\end{example}
+
+\begin{example}\ 
+    \begin{problem}
+        Find the area of the paraboloid given by
+        \[
+            x^2 + y^2 = az \quad a>0,\,z\in[0,h]
+        \]
+    \end{problem}
+    \begin{solution}
+        First we take the parametrisation of the paraboloid as
+        \[
+            \vec{r} =
+            \begin{colvector}
+                v\cos u\\
+                v\sin u\\
+                \frac{v^2}{a}
+            \end{colvector}\qquad
+            u\in[0,2\pi],\,v\in[0,\sqrt{ah}]
+        \]
+        Now,
+        \begin{flalign*}
+            \parderiv{\vec{r}}{u} &=
+                \begin{colvector}
+                    -v\sin u\\
+                    v\cos u\\
+                    0
+                \end{colvector} &&\\
+            \parderiv{\vec{r}}{v} &=
+                \begin{colvector}
+                    \cos u\\
+                    \sin u\\
+                    2\frac{v}{a}
+                \end{colvector}\\
+        \end{flalign*}
+        \begin{flalign*}
+            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &= 
+                \left|\left(\begin{array}{ccc}
+                    \hat{i} &   \hat{j} &   \hat{k} \\
+                    -v\sin u&   v\cos u &   0       \\
+                    \cos u  &   \sin u  &   2\frac{v}{a}
+                \end{array}\right)\right| &&\\
+            &=
+                \begin{colvector}
+                    \frac{2v^2\cos u}{a}\\
+                    \frac{2v^2\sin u}{a}\\
+                    -v
+                \end{colvector} &&\\
+            \left\|\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right\| &=
+                \sqrt{\dfrac{4v^4}{a^2} \left( \cos^2u + \sin^2u \right) + v^2} &&\\
+            &=
+                \sqrt{\dfrac{4v^4}{a^2} + v^2}
+        \end{flalign*}
+        
+        \begin{flalign*}
+            \text{Area} &= \iint_S\ddns a &&\\
+             &= \int_0^{\sqrt{ah}} \int_{u=0}^{2\pi} \sqrt{\dfrac{4v^4}{a^2} + v^2} \dd u \ddns v &&\\
+             &= 2\pi \int_0^{\sqrt{ah}} \sqrt{\dfrac{4v^4}{a^2} + v^2} \dd v &&\\
+             &= 2\pi \int_0^{\sqrt{ah}} \frac{v}{a} \sqrt{4v^2+a^2} \dd v &&\\
+             &&&\\
+             \mlet s &= \sqrt{4v^2+a^2}&&\\
+             \therefore \dd s &= \frac{4v}{\sqrt{4v^2+a^2}}\dd v &&\\
+             \therefore \text{Area} &= 2\pi \int_{v=0}^{\sqrt{ah}} \frac{s^2}{4a} \dd s &&\\
+             &= \left.\frac{\pi}{6a} s^3 \right|_{v=0}^{\sqrt{ah}} &&\\
+             &= \left.\frac{\pi}{6a} (4v^2+a^2)^{\frac{3}{2}} \right|_{v=0}^{\sqrt{ah}} &&\\
+             &= \frac{\pi}{6a} \left((4ah+a^2)^{\frac{3}{2}} - a^3\right) &&
+        \end{flalign*}
+    \end{solution}
+\end{example}
+
+
 
 \end{document}

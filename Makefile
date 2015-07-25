@@ -1,3 +1,5 @@
+all: AA.pdf
+
 %.pdf: %.tex
 	mkdir -p build
 	cd build/ && latex -output-format=pdf ../$<
