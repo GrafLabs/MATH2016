@@ -2,7 +2,8 @@ all: AA.pdf
 
 %.pdf: %.tex
 	mkdir -p build
-	cd build/ && latex -output-format=pdf ../$<
+	cp $< build/$<
+	cd build && latex -shell-escape -output-format=pdf $<
 	mv build/$@ $@
 
 clean-all: clean

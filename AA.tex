@@ -7,6 +7,11 @@
 \usepackage{enumerate}
 \usepackage{tcolorbox}
 
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\usepgfplotslibrary{external}
+\tikzexternalize
+
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -34,6 +39,7 @@
 \newcommand{\me}{\mathrm{e}}
 \newcommand{\real}{\mathbb{R}}
 \newcommand{\mlet}{\text{let}\,}
+\renewcommand{\implies}{\Rightarrow}
 
 \begin{document}
 \parindent0pt
@@ -176,6 +182,75 @@
              &= \left.\frac{\pi}{6a} s^3 \right|_{v=0}^{\sqrt{ah}} &&\\
              &= \left.\frac{\pi}{6a} (4v^2+a^2)^{\frac{3}{2}} \right|_{v=0}^{\sqrt{ah}} &&\\
              &= \frac{\pi}{6a} \left((4ah+a^2)^{\frac{3}{2}} - a^3\right) &&
+        \end{flalign*}
+    \end{solution}
+\end{example}
+
+\pagebreak
+\begin{example}\ 
+    \begin{problem}
+        Find the area of the triangle with vertices $(0,0,0),\,(1,0,2),\,(0,2,6)$.
+    \end{problem}
+    \begin{solution}\\*
+        First we must parametrise our triangle:
+        \begin{flushleft}\begin{tikzpicture}
+            \begin{axis}[
+                xlabel = {$x$},
+                ylabel = {$y$},
+                zlabel = {$z$},
+                xtick=data,
+                ytick=data,
+                ztick=data,
+                grid=major]
+                \addplot3[patch, color=blue, fill=blue, shader=flat, opacity=0.5] coordinates {(0,0,0) (1,0,2) (0,2,6)};
+            \end{axis}
+        \end{tikzpicture}\end{flushleft}
+        
+        \begin{flalign*}
+            \vec{r} &= u\begin{colvector}1\\0\\2\end{colvector} + v \begin{colvector}0\\2\\6\end{colvector} &&\\
+            &= \begin{colvector}u\\2v\\2u+6v\end{colvector} &&
+        \end{flalign*}
+        
+        We can see that $u=0\implies v\in[0,1]$ and $v=0 \implies u\in[0,1]$. So we now have our limits for the cases of $u=0$ and $v=0$, but now we must
+        find the limits for $u,v\neq0$.
+        
+        First we fix $u\in(0,1]$, and find $\max v$ which gives us a resultant vector that lies on the line parametrised by:
+        \begin{eqnarray*}
+            \vec{r} &=& \begin{colvector}1\\0\\2\end{colvector} + \lambda\left(
+            \begin{colvector}0\\2\\6\end{colvector} - \begin{colvector}1\\0\\2\end{colvector}\right)
+            \quad\lambda\in[0,1]\\
+            \begin{colvector}u\\2v\\2u+6v\end{colvector} &=&
+            \begin{colvector}1-\lambda \\ 2\lambda \\ 2 + 4\lambda\end{colvector}
+        \end{eqnarray*}
+        
+        \begin{flalign*}
+            2v &= 2\lambda &&\\
+            \therefore v &= \lambda &&\\
+            u &= 1-\lambda &&\\
+            \implies v &= 1-u &&
+        \end{flalign*}
+        
+        Therefore for a fixed $u$ $\max v$ is given by $(1-u)$, which gives us our final parametrisation as:
+        \begin{flalign*}
+            \vec{r} &= \begin{colvector}u\\2v\\2u+6v\end{colvector}\qquad u\in[0,1],\, v\in[0,1-u]&&
+        \end{flalign*}
+        
+        \begin{eqnarray*}
+            \parderiv{\vec{r}}{u} &=& \begin{colvector}1\\0\\2\end{colvector}\\
+            \parderiv{\vec{r}}{v} &=& \begin{colvector}0\\2\\6\end{colvector}\\
+            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=& \begin{colvector}-4\\-6\\2\end{colvector}\\
+            \left\|\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right\|
+                &=& \sqrt{16+36+4}\\
+                &=& 2\sqrt{14}
+        \end{eqnarray*}
+        
+        Now,
+        \begin{flalign*}
+            \text{Area} \Delta &= \iint_\Delta \ddns a &&\\
+            &= \int_0^1 \int_{v=0}^{1-u} 2\sqrt{14} \dd v \ddns u &&\\
+            &= \int_0^1 2\sqrt{14}(1-u) \dd u &&\\
+            &= \left. 2\sqrt{14}u - \sqrt{14}u^2 \right|_0^1 &&\\
+            &= \sqrt{14} &&
         \end{flalign*}
     \end{solution}
 \end{example}
