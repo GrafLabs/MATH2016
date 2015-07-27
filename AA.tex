@@ -307,4 +307,37 @@
         \end{flalign*}
     \end{solution}
 \end{example}
+
+\begin{example}\ 
+    \begin{problem}
+        Let $S$ be a surface and $\vec{F}$ be a vector field such that for each $\vec{x}\in S$, $\vec{F}(\vec{x})$ is tangent
+        to $S$ at $\vec{x}$. Prove that $\iint\limits_S\vec{F}\cdot\ddns\vec{a} = 0$.
+    \end{problem}
+    \begin{solution}
+        Since $\vec{F}(\vec{x})$ is tangential to $S\mathop{}\,\forall \vec{x}\in S$.
+        \[
+            \therefore \vec{F}\!\perp\vec{n}\quad\forall\vec{n}
+        \]
+        In particular,
+        \begin{flalign*}
+            &\vec{F}(\vec{r}(u,v))\!\perp\left(\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right)&&\\
+            \implies&\vec{F}(\vec{r}(u,v))\cdot\left(\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right) = 0&&\\
+            \therefore &\iint_S\vec{F}\cdot\ddns\vec{a} = \iint_S\vec{F}(\vec{r}(u,v))\cdot\left(\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right)\dd u\ddns v &&\\
+            &\iint_S\vec{F}\cdot\ddns\vec{a} = 0 &&
+        \end{flalign*}
+        \qed
+    \end{solution}
+\end{example}
+
+\begin{tikzpicture}
+    \begin{axis}[scale mode=scale uniformly, xmin=-1.5, xmax=1.5, ymin=-1.5, ymax=1.5, zmin=-1.5, zmax=1.5, width=20cm, axis lines=middle, view={45}{30}]
+        \addplot3[surf, domain=0:2*pi, domain y=0:pi, samples=60, samples y=60, opacity=0.1, fill=blue, shader=flat, color=blue]
+            ({sin(deg(y))*cos(deg(x))}, {sin(deg(y))*sin(deg(x))}, {cos(deg(y))});
+        \addplot3[mark=none, color=red] coordinates {(0,0,0) (0.5,0.5,{cos(45)})};
+        \addplot3[only marks, color=red, mark=oplus*] coordinates {(0.5,0.5,{cos(45)})};
+        \addplot3[mark=none] coordinates {(0,0,0) (0.5,0.5,0) (0.5,0.5,{cos(45)})};
+        \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*cos(x)},{0.3*sin(x)},0);
+        \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*sin(x)*cos(45)},{0.3*sin(45)*sin(x)},{0.3*cos(x)});
+    \end{axis}
+\end{tikzpicture}
 \end{document}
