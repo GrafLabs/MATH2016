@@ -255,6 +255,56 @@
     \end{solution}
 \end{example}
 
-
-
+\begin{example}\ 
+    \begin{problem}
+        Let
+        \[
+            \vec{F}(x,y,z) = \begin{colvector}2x\\y\\z\end{colvector}
+        \]
+        and let $S$ be the surface $z=(1+x)y^2$ with normal having positive $z$-component, $x\in[0,1],\,y\in[0,2]$.\\*
+        Find $\iint\limits_S\vec{F}\cdot\ddns\vec{a}$
+    \end{problem}
+    \begin{solution}
+        \begin{flushleft}
+            \begin{tikzpicture}
+                \begin{axis}[]
+                    \addplot3[surf, color=blue, fill=blue, shader=flat, opacity=0.5, samples=50, domain=0:1, domain y=0:2]
+                        {(1+x)*y^2};
+                \end{axis}
+            \end{tikzpicture}
+        \end{flushleft}
+        \[
+            \vec{r}(u,v) = \begin{colvector}u\\v\\(1+u)v^2\end{colvector}\qquad u\in[0,1],\,v\in[0,2]
+        \]
+        \begin{flalign*}
+            \parderiv{\vec{r}}{u} &= \begin{colvector}1\\0\\v^2\end{colvector} &&\\
+            \parderiv{\vec{r}}{v} &= \begin{colvector}0\\1\\2(1+u)v\end{colvector} &&
+        \end{flalign*}
+        \begin{flalign*}
+            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=
+                \left|\begin{array}{ccc}
+                    \hat{i} & \hat{j} & \hat{k}\\
+                    1 & 0 & v^2\\
+                    0 & 1 & 2(1+u)v
+                \end{array}\right| &&\\
+            &= \begin{colvector}-v^2\\-2(1+u)v\\1\end{colvector} &&
+        \end{flalign*}
+        
+        Furthermore:
+        \begin{flalign*}
+            \vec{F}(\vec{r}(u,v)) &= \begin{colvector}2u\\v\\(1+u)v^2\end{colvector} &&
+        \end{flalign*}
+        
+        Therefore,
+        \begin{flalign*}
+            \iint_S\vec{F}\cdot\ddns\vec{a} &= \int_0^2 \int_0^1 \begin{colvector}2u\\v\\(1+u)v^2\end{colvector} \cdot \begin{colvector}-v^2\\-2(1+u)v\\1\end{colvector} \dd u\ddns v&&\\
+            &= \int_0^2 \int_0^1 -2uv^2 - 2v^2 -2uv^2 + v^2 + uv^2 \dd u\ddns v &&\\
+            &= \int_0^2 \int_0^1 -3uv^2 - v^2 \dd u\ddns v &&\\
+            &= \int_0^2 \left. -\frac{3}{2}u^2v^2-uv^2 \right|_{u=0}^1 \dd v &&\\
+            &= \int_0^2 -\frac{5}{2}v^2\dd v &&\\
+            &= \left. -\frac{5}{6}v^3 \right|_0^2 &&\\
+            &= -\frac{20}{3} &&
+        \end{flalign*}
+    \end{solution}
+\end{example}
 \end{document}
