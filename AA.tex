@@ -39,6 +39,7 @@
 \newcommand{\me}{\mathrm{e}}
 \newcommand{\real}{\mathbb{R}}
 \newcommand{\mlet}{\text{let}\,}
+\newcommand{\suchthat}{\mathop{}\colon\,}
 \renewcommand{\implies}{\Rightarrow}
 
 \begin{document}
@@ -329,15 +330,57 @@
     \end{solution}
 \end{example}
 
-\begin{tikzpicture}
-    \begin{axis}[scale mode=scale uniformly, xmin=-1.5, xmax=1.5, ymin=-1.5, ymax=1.5, zmin=-1.5, zmax=1.5, width=20cm, axis lines=middle, view={45}{30}]
-        \addplot3[surf, domain=0:2*pi, domain y=0:pi, samples=60, samples y=60, opacity=0.1, fill=blue, shader=flat, color=blue]
-            ({sin(deg(y))*cos(deg(x))}, {sin(deg(y))*sin(deg(x))}, {cos(deg(y))});
-        \addplot3[mark=none, color=red] coordinates {(0,0,0) (0.5,0.5,{cos(45)})};
-        \addplot3[only marks, color=red, mark=oplus*] coordinates {(0.5,0.5,{cos(45)})};
-        \addplot3[mark=none] coordinates {(0,0,0) (0.5,0.5,0) (0.5,0.5,{cos(45)})};
-        \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*cos(x)},{0.3*sin(x)},0);
-        \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*sin(x)*cos(45)},{0.3*sin(45)*sin(x)},{0.3*cos(x)});
-    \end{axis}
-\end{tikzpicture}
+\begin{example}\ 
+    \begin{problem}
+        Let $\vec{F}(x,y,z) = \begin{colvector}x\\y\\z\end{colvector}$ and $S = \{(x,y,z)\suchthat x^2+y^2+z^2=1\}$. Let $S$ be oriented such that the normal
+        to $S$ points outward. Evaluate $\iint\limits_S\vec{F}\cdot\ddns\vec{a}$
+    \end{problem}
+    \begin{solution}
+        \begin{tikzpicture}
+            \begin{axis}[scale mode=scale uniformly, xmin=-1.5, xmax=1.5, ymin=-1.5, ymax=1.5, zmin=-1.5, zmax=1.5, width=20cm, axis lines=middle, view={45}{30}]
+                \addplot3[surf, domain=0:2*pi, domain y=0:pi, samples=60, samples y=60, opacity=0.1, fill=blue, shader=flat, color=blue]
+                    ({sin(deg(y))*cos(deg(x))}, {sin(deg(y))*sin(deg(x))}, {cos(deg(y))});
+                \addplot3[mark=none, color=red] coordinates {(0,0,0) (0.5,0.5,{cos(45)})};
+                \addplot3[only marks, color=red, mark=oplus*] coordinates {(0.5,0.5,{cos(45)})};
+                \addplot3[mark=none] coordinates {(0,0,0) (0.5,0.5,0) (0.5,0.5,{cos(45)})};
+                \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*cos(x)},{0.3*sin(x)},0);
+                \addplot3[mark=none, domain=0:45, samples=15, samples y=0] ({0.3*sin(x)*cos(45)},{0.3*sin(45)*sin(x)},{0.3*cos(x)});
+            \end{axis}
+        \end{tikzpicture}
+        \[
+            \begin{array}{l}
+                x = R\sin{v}\cos{u}\\
+                y = R\sin{v}\sin{u}\\
+                z = R\cos{v}
+            \end{array}\qquad
+            \begin{array}{l}
+                u\in[0,2\pi]\\
+                v\in[0,\pi]
+            \end{array}
+        \]
+        \begin{flalign*}
+            \vec{r}(u,v) &= \begin{colvector}\sin{v}\cos{u}\\\sin{v}\sin{u}\\\cos{v}\end{colvector} &&\\
+            \parderiv{\vec{r}}{u} &= \begin{colvector}-\sin{u}\sin{v}\\\cos{u}\sin{v}\\0\end{colvector} &&\\
+            \parderiv{\vec{r}}{v} &= \begin{colvector}\cos{u}\cos{v}\\\sin{u}\cos{v}\\-\sin{v}\end{colvector} &&\\
+            \parderiv{\vec{r}}{u} \times \parderiv{\vec{r}}{v} &= \begin{colvector}-\cos{u}\sin^2{v}\\-\sin{u}\sin^2{v}\\-\sin{v}\cos{v}\end{colvector} &&\\
+            &= -\sin{\!(v)}\vec{r}(u,v)&&
+        \end{flalign*}
+        but this normal vector is oriented inwards. So instead we take
+        \[
+            \vec{n} = -\left(\parderiv{\vec{r}}{u} \times \parderiv{\vec{r}}{v}\right) = \sin{\!(v)}\vec{r}(u,v)
+        \]
+        
+        So,
+        \begin{flalign*}
+            \vec{F}(\vec{r}(u,v)) &= \vec{r}(u,v) &&\\
+            \iint_S\vec{F}\cdot\ddns\vec{a} &= \int_0^{2\pi} \int_{v=0}^\pi \vec{r}(u,v)\cdot(\sin{\!(v)}\vec{r}(u,v))\dd v\ddns u &&\\
+            &= \int_0^{2\pi} \int_{v=0}^\pi \sin{v} \left\|\vec{r}(u,v)\right\|^2 \dd v\ddns u &&\\
+            &= \int_0^{2\pi} \int_{v=0}^\pi \sin{v} \dd v\ddns u &&\\
+            &= \int_0^{2\pi} \left.-\cos{v}\right|_{v=0}^\pi \dd u &&\\
+            &= \int_0^{2\pi} 2 \dd u &&\\
+            &= \left. 2u\right|_0^{2\pi} &&\\
+            &= 4\pi &&
+        \end{flalign*}
+    \end{solution}
+\end{example}
 \end{document}
