@@ -12,7 +12,10 @@
 \usepgfplotslibrary{external}
 \tikzexternalize
 
+\theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[chapter]
+\newtheorem*{theorem*}{Theorem}
+\theoremstyle{plain}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -23,13 +26,17 @@
 \theoremstyle{plain}
 
 \newcommand{\dd}{\mathop{}\,\mathrm{d}}
+\newcommand{\DD}{\mathop{}\,\mathrm{D}}
 \newcommand{\ddns}{\mathrm{d}}
 \newcommand{\deriv}[2]{\dfrac{\dd #1}{\dd #2}}
 \newcommand{\parderiv}[2]{\dfrac{\partial #1}{\partial #2}}
 
 \newenvironment{problem}{\par\begin{tcolorbox}\textbf{Problem}\\*}{\end{tcolorbox}}
 \newenvironment{solution}{\par\textbf{Solution}\\*}{{\par\centering\rule{3cm}{.1pt}\par}}
-\newenvironment{colvector}{\left(\!\!\!\begin{array}{c}}{\end{array}\!\!\!\right)}
+\newenvironment{colvectorenvironment}{\left(\!\!\!\begin{array}{c}}{\end{array}\!\!\!\right)}
+\newenvironment{notes}{\textsc{Notes:}\begin{enumerate}[1)]}{\end{enumerate}}
+
+\newenvironment{proofenv}{\begin{proof}}{\end{proof}{\par\centering\rule{3cm}{.1pt}\par}}
 
 %\newcommand{\qed}{\nobreak \ifvmode \relax \else
 %      \ifdim\lastskip<1.5em \hskip-\lastskip
@@ -40,7 +47,14 @@
 \newcommand{\real}{\mathbb{R}}
 \newcommand{\mlet}{\text{let}\,}
 \newcommand{\suchthat}{\mathop{}\colon\,}
+\newcommand{\domain}{\mathcal{D}}
+\newcommand{\curl}[1]{\nabla\!\times\!#1}
+\newcommand{\colvector}[1]{\begin{colvectorenvironment}#1\end{colvectorenvironment}}
+\newcommand{\crossnormal}[3]{\left(\parderiv{\vec{#1}}{#2} \times \parderiv{\vec{#1}}{#3} \right)}
+\newcommand{\vecprime}[1]{\vec{#1}^{\,\prime}}
+
 \renewcommand{\implies}{\Rightarrow}
+\renewcommand\qedsymbol{$\blacksquare$}
 
 \begin{document}
 \parindent0pt
@@ -58,11 +72,11 @@
         Consider a cone parametrised by:
         \[
             \vec{r}(u,v) =
-            \begin{colvector}
+            \begin{colvectorenvironment}
                 v\cos u\\
                 v\sin u\\
                 v
-            \end{colvector}\quad
+            \end{colvectorenvironment}\quad
             u\in[0,2\pi],\,
             v\in[0,1]
         \]
@@ -76,18 +90,18 @@
         \]
         \[\begin{array}{lcr}
             \parderiv{\vec{r}}{u} =
-            \begin{colvector}
+            \begin{colvectorenvironment}
                 -v\sin u\\
                 v\cos u\\
                 0
-            \end{colvector}
+            \end{colvectorenvironment}
             &\qquad&
             \parderiv{\vec{r}}{v} =
-            \begin{colvector}
+            \begin{colvectorenvironment}
                 \cos u\\
                 \sin u\\
                 1
-            \end{colvector}
+            \end{colvectorenvironment}
         \end{array}\]
         \begin{eqnarray*}
             \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=&
@@ -97,11 +111,11 @@
                 \cos u & \sin u & 1
             \end{array}\right)\right|\\
             &=&
-            \begin{colvector}
+            \begin{colvectorenvironment}
                 v\cos u\\
                 v\sin u\\
                 -v
-            \end{colvector}\\
+            \end{colvectorenvironment}\\
             \left\| \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} \right\| &=&
             \sqrt{v^2\cos^2u + v^2\sin^2u + v^2}\\
             &=&\sqrt2v
@@ -130,27 +144,27 @@
         First we take the parametrisation of the paraboloid as
         \[
             \vec{r} =
-            \begin{colvector}
+            \begin{colvectorenvironment}
                 v\cos u\\
                 v\sin u\\
                 \frac{v^2}{a}
-            \end{colvector}\qquad
+            \end{colvectorenvironment}\qquad
             u\in[0,2\pi],\,v\in[0,\sqrt{ah}]
         \]
         Now,
         \begin{flalign*}
             \parderiv{\vec{r}}{u} &=
-                \begin{colvector}
+                \begin{colvectorenvironment}
                     -v\sin u\\
                     v\cos u\\
                     0
-                \end{colvector} &&\\
+                \end{colvectorenvironment} &&\\
             \parderiv{\vec{r}}{v} &=
-                \begin{colvector}
+                \begin{colvectorenvironment}
                     \cos u\\
                     \sin u\\
                     2\frac{v}{a}
-                \end{colvector}\\
+                \end{colvectorenvironment}\\
         \end{flalign*}
         \begin{flalign*}
             \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &= 
@@ -160,11 +174,11 @@
                     \cos u  &   \sin u  &   2\frac{v}{a}
                 \end{array}\right)\right| &&\\
             &=
-                \begin{colvector}
+                \begin{colvectorenvironment}
                     \frac{2v^2\cos u}{a}\\
                     \frac{2v^2\sin u}{a}\\
                     -v
-                \end{colvector} &&\\
+                \end{colvectorenvironment} &&\\
             \left\|\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right\| &=
                 \sqrt{\dfrac{4v^4}{a^2} \left( \cos^2u + \sin^2u \right) + v^2} &&\\
             &=
@@ -208,8 +222,8 @@
         \end{tikzpicture}\end{flushleft}
         
         \begin{flalign*}
-            \vec{r} &= u\begin{colvector}1\\0\\2\end{colvector} + v \begin{colvector}0\\2\\6\end{colvector} &&\\
-            &= \begin{colvector}u\\2v\\2u+6v\end{colvector} &&
+            \vec{r} &= u\begin{colvectorenvironment}1\\0\\2\end{colvectorenvironment} + v \begin{colvectorenvironment}0\\2\\6\end{colvectorenvironment} &&\\
+            &= \begin{colvectorenvironment}u\\2v\\2u+6v\end{colvectorenvironment} &&
         \end{flalign*}
         
         We can see that $u=0\implies v\in[0,1]$ and $v=0 \implies u\in[0,1]$. So we now have our limits for the cases of $u=0$ and $v=0$, but now we must
@@ -217,11 +231,11 @@
         
         First we fix $u\in(0,1]$, and find $\max v$ which gives us a resultant vector that lies on the line parametrised by:
         \begin{eqnarray*}
-            \vec{r} &=& \begin{colvector}1\\0\\2\end{colvector} + \lambda\left(
-            \begin{colvector}0\\2\\6\end{colvector} - \begin{colvector}1\\0\\2\end{colvector}\right)
+            \vec{r} &=& \begin{colvectorenvironment}1\\0\\2\end{colvectorenvironment} + \lambda\left(
+            \begin{colvectorenvironment}0\\2\\6\end{colvectorenvironment} - \begin{colvectorenvironment}1\\0\\2\end{colvectorenvironment}\right)
             \quad\lambda\in[0,1]\\
-            \begin{colvector}u\\2v\\2u+6v\end{colvector} &=&
-            \begin{colvector}1-\lambda \\ 2\lambda \\ 2 + 4\lambda\end{colvector}
+            \begin{colvectorenvironment}u\\2v\\2u+6v\end{colvectorenvironment} &=&
+            \begin{colvectorenvironment}1-\lambda \\ 2\lambda \\ 2 + 4\lambda\end{colvectorenvironment}
         \end{eqnarray*}
         
         \begin{flalign*}
@@ -233,13 +247,13 @@
         
         Therefore for a fixed $u$ $\max v$ is given by $(1-u)$, which gives us our final parametrisation as:
         \begin{flalign*}
-            \vec{r} &= \begin{colvector}u\\2v\\2u+6v\end{colvector}\qquad u\in[0,1],\, v\in[0,1-u]&&
+            \vec{r} &= \begin{colvectorenvironment}u\\2v\\2u+6v\end{colvectorenvironment}\qquad u\in[0,1],\, v\in[0,1-u]&&
         \end{flalign*}
         
         \begin{eqnarray*}
-            \parderiv{\vec{r}}{u} &=& \begin{colvector}1\\0\\2\end{colvector}\\
-            \parderiv{\vec{r}}{v} &=& \begin{colvector}0\\2\\6\end{colvector}\\
-            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=& \begin{colvector}-4\\-6\\2\end{colvector}\\
+            \parderiv{\vec{r}}{u} &=& \begin{colvectorenvironment}1\\0\\2\end{colvectorenvironment}\\
+            \parderiv{\vec{r}}{v} &=& \begin{colvectorenvironment}0\\2\\6\end{colvectorenvironment}\\
+            \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=& \begin{colvectorenvironment}-4\\-6\\2\end{colvectorenvironment}\\
             \left\|\parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v}\right\|
                 &=& \sqrt{16+36+4}\\
                 &=& 2\sqrt{14}
@@ -260,7 +274,7 @@
     \begin{problem}
         Let
         \[
-            \vec{F}(x,y,z) = \begin{colvector}2x\\y\\z\end{colvector}
+            \vec{F}(x,y,z) = \begin{colvectorenvironment}2x\\y\\z\end{colvectorenvironment}
         \]
         and let $S$ be the surface $z=(1+x)y^2$ with normal having positive $z$-component, $x\in[0,1],\,y\in[0,2]$.\\*
         Find $\iint\limits_S\vec{F}\cdot\ddns\vec{a}$
@@ -275,11 +289,11 @@
             \end{tikzpicture}
         \end{flushleft}
         \[
-            \vec{r}(u,v) = \begin{colvector}u\\v\\(1+u)v^2\end{colvector}\qquad u\in[0,1],\,v\in[0,2]
+            \vec{r}(u,v) = \begin{colvectorenvironment}u\\v\\(1+u)v^2\end{colvectorenvironment}\qquad u\in[0,1],\,v\in[0,2]
         \]
         \begin{flalign*}
-            \parderiv{\vec{r}}{u} &= \begin{colvector}1\\0\\v^2\end{colvector} &&\\
-            \parderiv{\vec{r}}{v} &= \begin{colvector}0\\1\\2(1+u)v\end{colvector} &&
+            \parderiv{\vec{r}}{u} &= \begin{colvectorenvironment}1\\0\\v^2\end{colvectorenvironment} &&\\
+            \parderiv{\vec{r}}{v} &= \begin{colvectorenvironment}0\\1\\2(1+u)v\end{colvectorenvironment} &&
         \end{flalign*}
         \begin{flalign*}
             \parderiv{\vec{r}}{u}\times\parderiv{\vec{r}}{v} &=
@@ -288,17 +302,17 @@
                     1 & 0 & v^2\\
                     0 & 1 & 2(1+u)v
                 \end{array}\right| &&\\
-            &= \begin{colvector}-v^2\\-2(1+u)v\\1\end{colvector} &&
+            &= \begin{colvectorenvironment}-v^2\\-2(1+u)v\\1\end{colvectorenvironment} &&
         \end{flalign*}
         
         Furthermore:
         \begin{flalign*}
-            \vec{F}(\vec{r}(u,v)) &= \begin{colvector}2u\\v\\(1+u)v^2\end{colvector} &&
+            \vec{F}(\vec{r}(u,v)) &= \begin{colvectorenvironment}2u\\v\\(1+u)v^2\end{colvectorenvironment} &&
         \end{flalign*}
         
         Therefore,
         \begin{flalign*}
-            \iint_S\vec{F}\cdot\ddns\vec{a} &= \int_0^2 \int_0^1 \begin{colvector}2u\\v\\(1+u)v^2\end{colvector} \cdot \begin{colvector}-v^2\\-2(1+u)v\\1\end{colvector} \dd u\ddns v&&\\
+            \iint_S\vec{F}\cdot\ddns\vec{a} &= \int_0^2 \int_0^1 \begin{colvectorenvironment}2u\\v\\(1+u)v^2\end{colvectorenvironment} \cdot \begin{colvectorenvironment}-v^2\\-2(1+u)v\\1\end{colvectorenvironment} \dd u\ddns v&&\\
             &= \int_0^2 \int_0^1 -2uv^2 - 2v^2 -2uv^2 + v^2 + uv^2 \dd u\ddns v &&\\
             &= \int_0^2 \int_0^1 -3uv^2 - v^2 \dd u\ddns v &&\\
             &= \int_0^2 \left. -\frac{3}{2}u^2v^2-uv^2 \right|_{u=0}^1 \dd v &&\\
@@ -332,7 +346,7 @@
 
 \begin{example}\ 
     \begin{problem}
-        Let $\vec{F}(x,y,z) = \begin{colvector}x\\y\\z\end{colvector}$ and $S = \{(x,y,z)\suchthat x^2+y^2+z^2=1\}$. Let $S$ be oriented such that the normal
+        Let $\vec{F}(x,y,z) = \begin{colvectorenvironment}x\\y\\z\end{colvectorenvironment}$ and $S = \{(x,y,z)\suchthat x^2+y^2+z^2=1\}$. Let $S$ be oriented such that the normal
         to $S$ points outward. Evaluate $\iint\limits_S\vec{F}\cdot\ddns\vec{a}$
     \end{problem}
     \begin{solution}
@@ -359,10 +373,10 @@
             \end{array}
         \]
         \begin{flalign*}
-            \vec{r}(u,v) &= \begin{colvector}\sin{v}\cos{u}\\\sin{v}\sin{u}\\\cos{v}\end{colvector} &&\\
-            \parderiv{\vec{r}}{u} &= \begin{colvector}-\sin{u}\sin{v}\\\cos{u}\sin{v}\\0\end{colvector} &&\\
-            \parderiv{\vec{r}}{v} &= \begin{colvector}\cos{u}\cos{v}\\\sin{u}\cos{v}\\-\sin{v}\end{colvector} &&\\
-            \parderiv{\vec{r}}{u} \times \parderiv{\vec{r}}{v} &= \begin{colvector}-\cos{u}\sin^2{v}\\-\sin{u}\sin^2{v}\\-\sin{v}\cos{v}\end{colvector} &&\\
+            \vec{r}(u,v) &= \begin{colvectorenvironment}\sin{v}\cos{u}\\\sin{v}\sin{u}\\\cos{v}\end{colvectorenvironment} &&\\
+            \parderiv{\vec{r}}{u} &= \begin{colvectorenvironment}-\sin{u}\sin{v}\\\cos{u}\sin{v}\\0\end{colvectorenvironment} &&\\
+            \parderiv{\vec{r}}{v} &= \begin{colvectorenvironment}\cos{u}\cos{v}\\\sin{u}\cos{v}\\-\sin{v}\end{colvectorenvironment} &&\\
+            \parderiv{\vec{r}}{u} \times \parderiv{\vec{r}}{v} &= \begin{colvectorenvironment}-\cos{u}\sin^2{v}\\-\sin{u}\sin^2{v}\\-\sin{v}\cos{v}\end{colvectorenvironment} &&\\
             &= -\sin{\!(v)}\vec{r}(u,v)&&
         \end{flalign*}
         but this normal vector is oriented inwards. So instead we take
@@ -383,4 +397,162 @@
         \end{flalign*}
     \end{solution}
 \end{example}
+
+\begin{tikzpicture}
+    \begin{axis}
+        \addplot3[surf, shader=flat] {(x^2+y^2)^(1/2)};
+    \end{axis}
+\end{tikzpicture}
+
+\section{Stoke's Theorem}
+
+\begin{theorem}[Green's Theorem]\label{thm:1-1}\ \\*
+    Let $\domain \subset \real^2$ have boundary $\partial\domain$ that is positively oriented\footnote{counter-clockwise in the $xy$-plane}
+    and piecewise smooth, let $p_1,p_2\colon\domain\to\real$ be continuously differentiable, then
+    \[
+        \iint_\domain \left( \DD_1p_2 - \DD_2p_1 \right) \dd u\ddns v
+        = \int_{\partial\domain}\begin{colvectorenvironment}p_1\\p_2\end{colvectorenvironment} \cdot \ddns\vec{\gamma}
+    \]
+\end{theorem}
+
+\begin{theorem}[Stoke's Theorem]\label{thm:1-2}\ \\*
+    Let $S$ be an oriented surface with a piecewise smooth boundary $\partial S$ and let $\vec{F}\colon \real^3\to\real^3$ be continuously
+    differentiable, then
+    \[
+        \iint_S \left( \curl{\vec{F}} \right) \cdot \ddns\vec{a} = \int_{\partial S}\vec{F}\cdot\ddns\vec{\gamma}
+    \]
+
+    \begin{notes}
+        \item
+            Stoke's Theorem relates infinitesimal rotation of the vector field $\vec{F}$ over $S$ to the (macroscopic) circulation/rotation
+            of $\vec{F}$ along the boundary of $S$.
+        \item
+            Stoke's Theorem is the generalization of Green's Theorem to 3 dimensions.
+    \end{notes}
+\end{theorem}
+
+\begin{proofenv}\ \\*
+    To prove that Stoke's Theorem reduces to Green's Theorem, we define:
+    \[
+        \vec{F} = \begin{colvectorenvironment}p_1\\p_2\\0\end{colvectorenvironment}
+        \qquad
+        \vec{r} = \begin{colvectorenvironment}x\\y\\0\end{colvectorenvironment}
+    \]
+    
+    \begin{eqnarray*}
+        \parderiv{\vec{r}}{x} \times \parderiv{\vec{r}}{y} &=&
+            \left|\begin{array}{ccc}
+                \hat{i} &   \hat{j} &   \hat{k} \\
+                1       &   0       &   0       \\
+                0       &   1       &   0
+            \end{array}\right| \\
+        &=& \colvector{0\\0\\1}
+    \end{eqnarray*}
+    
+    \begin{eqnarray*}
+        \curl{\vec{F}} &=&
+            \left|\begin{array}{ccc}
+                \hat{i}         &   \hat{j}         &   \hat{k}         \\
+                \parderiv{}{x}  &   \parderiv{}{y}  &   \parderiv{}{z}  \\
+                p_1             &   p_2             &   0
+            \end{array}\right| \\
+        &=& \colvector{0\\0\\\DD_1p_2 - \DD_2p_1}
+    \end{eqnarray*}
+    
+    \begin{eqnarray*}
+        \therefore \iint_\domain \left( \curl{\vec{F}} \right) \cdot \ddns\vec{a}
+        &=& \iint_\domain \colvector{0\\0\\\DD_1p_2 - \DD_2p_1} \cdot \colvector{0\\0\\1} \dd x\ddns y\\
+        &=& \iint_\domain \DD_1p_2-\DD_2p_1\dd x\ddns y
+    \end{eqnarray*}
+    which is Green's Theorem.
+\end{proofenv}
+
+\begin{proofenv} \nameref{thm:1-2}\\*
+    Let $\vec{r}(u,v)$ be a parametrisation of $S$.\\*
+    Let $\vec{\alpha}\colon [a,b] \to \real^2$ be a parametrisation of $\partial\domain$.\\*
+    Then $\vec{\gamma}(t) = \vec{r}(\vec{\alpha}(t))\quad t\in[a,b]$ is a parametrisation of $\partial S$, and this gives us
+    an orientation-preserving parametrisation of the boundary of $S$.
+    
+    We must show that
+    \[
+        \iint_\domain\curl{\vec{F}}(\vec{r}(u,v)) \cdot \crossnormal{r}{u}{v} \dd u\ddns v
+        =
+        \int_a^b\vec{F}(\vec{\gamma}(t)) \cdot \vec{\gamma}^\prime(t) \dd t
+    \]
+    
+    Note:
+    \begin{eqnarray}
+        \curl{\vec{F}}(\vec{r}(u,v)) \cdot \crossnormal{r}{u}{v}
+        &=&
+        \sum_{i,j=1}^3 \parderiv{\vec{F_i}}{x_j} \left(
+            \parderiv{\vec{r_i}}{v}\parderiv{\vec{r_j}}{u} - \parderiv{\vec{r_j}}{v}\parderiv{\vec{r_i}}{u}
+            \right) \label{thm:1-2-1}
+    \end{eqnarray}
+    
+    Now,
+    \begin{flalign*}
+        & \int_a^b \vec{F}(\vec{\gamma}(t)) \cdot \vecprime{\gamma}(t) \dd t &&\\
+        =& \int_a^b \vec{F}(\vec{r}(\vec{\alpha}(t))) \cdot (\vecprime{r} (\vec{\alpha}(t)) \vecprime{\alpha}(t)) \dd t &&\\
+        =& \int_a^b \left( (\vec{F} \circ \vec{r}\,)(\vec{\alpha}(t)) \right)^\top
+            \left( \vecprime{r}(\vec{\alpha}(t))\vecprime{\alpha}(t) \right) \dd t &&\\
+        =& \left( \left( (\vec{F}\circ \vec{r}\,)(\vec{\alpha}(t)) \right)^\top \vecprime{r}(\vec{\alpha}(t)) \right)^\top \cdot \vecprime{\alpha}(t) \dd t&&\\
+        =& \int_{\partial\domain} \left( (\vec{F}\circ\vec{r})^\top\vecprime{r} \right)^\top \cdot\ddns\vec{\alpha} &&\\
+        =& \int_{\partial\domain} \left( (\vecprime{r})^\top (\vec{F} \circ \vec{r}) \right)\cdot\ddns\vec{\alpha} &&\\
+        =& \int_{\partial\domain}
+            \left(\begin{array}{ccc}
+                \parderiv{r_1}{u} & \parderiv{r_2}{u} & \parderiv{r_3}{u} \\&&\\
+                \parderiv{r_1}{v} & \parderiv{r_2}{v} & \parderiv{r_3}{v} 
+            \end{array}\right)
+            \colvector{F_1 \circ \vec{r} \\ F_2 \circ \vec{r} \\ F_3 \circ \vec{r}}
+            \cdot\ddns\vec{\alpha} &&\\
+        =& \int_{\partial\domain} \colvector{
+                \sum\limits_{i=1}^3 \parderiv{r_i}{u} (F_i \circ \vec{r})\\
+                \sum\limits_{i=1}^3 \parderiv{r_i}{v} (F_i \circ \vec{r})}
+            \cdot\ddns\vec{\alpha}&& \\
+        =& \iint_\domain \left(
+            \parderiv{}{u}\left( \sum_{i=1}^3 \parderiv{r_i}{v} (F_i\circ\vec{r}) \right)
+            -
+            \parderiv{}{v}\left( \sum_{i=1}^3 \parderiv{r_i}{u} (F_i\circ\vec{r}) \right)
+            \right) \dd u\ddns v
+            \qquad \text{(By \nameref{thm:1-1})}&&\\
+        =& \iint_\domain \sum_{i=1}^3 \left(
+            \left( \parderiv{^2r_i}{u\partial v} (F_i\circ\vec{r}) + \parderiv{r_i}{v} \parderiv{(F_i\circ\vec{r})}{u} \right)
+            -
+            \left( \parderiv{^2r_i}{v\partial u} (F_i\circ\vec{r}) + \parderiv{r_i}{u} \parderiv{(F_i\circ\vec{r})}{v} \right)
+            \right) \dd u\ddns v &&
+    \end{flalign*}
+    \begin{flalign*}
+        =& \iint_\domain \sum_{i=1}^3 \left(
+            \parderiv{r_i}{v} \parderiv{(F_i\circ\vec{r})}{u} - \parderiv{r_i}{u} \parderiv{(F_i\circ\vec{r})}{v}
+            \right) \dd u \ddns v &&\\
+        =& \iint_\domain \sum_{i=1}^3 \left(
+            \parderiv{r_i}{v} \sum_{j=1}^3 \parderiv{F_i}{x_j} \parderiv{r_j}{u}
+            -
+            \parderiv{r_i}{u} \sum_{j=1}^3 \parderiv{F_i}{x_j} \parderiv{r_j}{v}
+            \right) \dd u \ddns v &&\\
+        =& \iint_\domain \sum_{i,j = 1}^3 \parderiv{F_i}{x_j} \left(
+            \parderiv{r_i}{v}\parderiv{r_j}{u} - \parderiv{r_j}{v}\parderiv{r_i}{u}
+            \right) \dd u \ddns v &&\\
+        =& \iint_\domain \curl{\vec{F}}(\vec{r}(u,v)) \cdot \crossnormal{r}{u}{v} \dd u\ddns v && \text{\eqref{thm:1-2-1}}
+    \end{flalign*}
+\end{proofenv}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
