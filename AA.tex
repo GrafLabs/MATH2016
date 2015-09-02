@@ -21,7 +21,10 @@
 \newtheorem{corollary}[theorem]{Corollary}
 
 \theoremstyle{definition}
-\newtheorem{tutorial}{Tutorial}[section]
+\newtheorem{tutorialx}{Tutorial}[section]
+\newenvironment{tutorial}
+    {\expandafter\tutorialx\addcontentsline{toc}{subsection}{Tutorial \thetutorialx}\ }
+    {\endtutorialx}
 \newtheorem{examplex}{Example}[section]
 \newenvironment{example}
     {\expandafter\examplex\addcontentsline{toc}{subsection}{Example \theexamplex}\ }
@@ -40,13 +43,10 @@
 \newenvironment{solution}{\par\textbf{Solution}\\*}{{\par\centering\rule{3cm}{.1pt}\par}}
 \newenvironment{colvectorenvironment}{\left(\!\!\!\begin{array}{c}}{\end{array}\!\!\!\right)}
 \newenvironment{notes}{\par\begin{tcolorbox}\textsc{Notes:}\begin{enumerate}[1)]}{\end{enumerate}\end{tcolorbox}}
+\newenvironment{aside}{\par\textbf{Note}\\*}{\par\centering\rule{3cm}{.1pt}\par}
+\newenvironment{asidebox}{\par\begin{tcolorbox}\textbf{Note}\\*}{\end{tcolorbox}}
 
 \newenvironment{proofenv}{\begin{proof}}{\end{proof}{\par\centering\rule{3cm}{.1pt}\par}}
-
-%\newcommand{\qed}{\nobreak \ifvmode \relax \else
-%      \ifdim\lastskip<1.5em \hskip-\lastskip
-%      \hskip1.5em plus0em minus0.5em \fi \nobreak
-%      \vrule height0.75em width0.5em depth0.25em\fi}
       
 \newcommand{\me}{\mathrm{e}}
 \newcommand{\real}{\mathbb{R}}
@@ -277,6 +277,19 @@
     \end{solution}
 \end{example}
 
+\begin{aside}
+    Recall that for a parametric surface:
+    \[
+        S = \left\{ \vec{r}(u,v)\colon (u,v)\in\domain \right\} \subset \real^3
+    \]
+    $\crossnormalnb{r}{u}{v}$ gives a normal vector to the surface with direction specified by the right-hand rule.\\*
+    We say that a (parametric) surface is smooth if $\parderiv{\vec{r}}{u}$ and $\parderiv{\vec{r}}{v}$ are continuous and
+    \[
+        \left\| \crossnormalnb{r}{u}{v} \right\| \neq 0\footnote{This tells us that the two tangent vectors must be linearly independent.}
+    \]
+    Moreover, a surface is piecewise smooth if it can be divided into finitely many portions all of which are smooth.
+\end{aside}
+
 \begin{example}
     \begin{problem}
         Let
@@ -445,6 +458,18 @@
         \end{flalign*}
     \end{solution}
 \end{example}
+
+\begin{tutorial}
+    \begin{problem}
+        For the following surfaces find $D_1\vec{r} \times D_2\vec{r}$ and $\left\| D_1\vec{r} \times D_2\vec{r} \right\|$:
+        \begin{enumerate}[a)]
+        \item
+            $z = (x^2 + y^2)^\frac{1}{2}$
+        \item
+            $\vec{r} = \colvector{v \\ u^3 - uv \\ u}$
+        \end{enumerate}
+    \end{problem}
+\end{tutorial}
 
 \section{Stokes' Theorem}
 
@@ -637,6 +662,30 @@
 
 \begin{example}
     \begin{problem}
+        Let $C$ be a closed curve in $\real^3$ for which there exists a surface $S$ such that $C = \partial S$. Let
+        $\vec{F}$ be a gradient field: $\vec{F} = \nabla\phi$ for some $\phi$. Prove that
+        \[
+            \int_C \vec{F} \cdot\ddns\vec{\gamma} = 0
+        \]
+    \end{problem}
+    
+    \begin{solution}
+        From \nameref{thm:1-2}, we have:
+        \[
+            \int_C \vec{F} \cdot\ddns\vec{\gamma} = \iint_S (\curl{\vec{F}}) \cdot\ddns\vec{a}
+        \]
+        but $\vec{F} = \nabla\phi$, which gives us
+        \begin{eqnarray*}
+            \int_C \vec{F} \cdot\ddns\vec{\gamma} &=& \iint_S (\curl{\nabla\phi}) \cdot\ddns\vec{a} \\
+            &=& \iint_S \vec{0} \cdot\ddns\vec{a} \\
+            &=& \iint_S 0 \dd{a} \\
+            &=& 0
+        \end{eqnarray*}
+    \end{solution}
+\end{example}
+
+\begin{example}
+    \begin{problem}
         Verify \nameref{thm:1-2} for the vector field
         \[
             \vec{F}(x,y,z) = \colvector{xy\\z\\x-2y}
@@ -760,6 +809,118 @@
         \end{flalign*}
     \end{solution}
 \end{example}
+
+\pagebreak
+\section{Potential Functions and Gradient Vector Fields}
+\begin{example}\ \\*
+    Let
+    \[
+        \vec{F}(x,y,z) = \colvector{yz \\ xz \\ xy}
+    \]
+    Then $\vec{F}$ is a gradient vector field with potential function $\phi(x,y,z) = xyz + c$, where $c$ is an arbitrary constant.
+    \par\centering\rule{3cm}{.1pt}\par
+\end{example}
+
+\begin{example}\ \\*
+    Let
+    \[
+        \vec{F}(x,y,z) = \frac{-2}{(x^2 + y^2 + z^2)^2} \colvector{x \\ y \\ z}
+    \]
+    Then $\vec{F}$ is a gradient vector field with potential function
+    \[
+        \phi(x,y,z) = \frac{1}{x^2 + y^2 + z^2} + c
+    \]
+    \par\centering\rule{3cm}{.1pt}\par
+\end{example}
+
+\begin{theorem}\label{thm:1-3}\ \\*
+    Let $\vec{F}$ be a vector field on the domain $\domain$. Then the following are equivalent:
+    \begin{enumerate}[1)]
+    \item
+        $\int\limits_\Gamma \vec{F} \cdot\ddns\vec{\gamma} = 0$ for every closed path $\Gamma$ in $\domain$
+    \item
+        $\int\limits_\Gamma \vec{F} \cdot\ddns\vec{\gamma}$ is independent of the choice of $\Gamma$\footnote{That is, $\vec{F}$ is conservative.}
+    \end{enumerate}
+\end{theorem}
+
+\begin{proofenv} \autoref{thm:1-3}\\*
+    \begin{trivlist}
+        \item[$(1)\implies(2)$]
+            Let $\vec{\Gamma}_1$, $\vec{\Gamma}_2$ be 2 paths in $\domain$, with equal endpoints.\\*
+            Let $\vec{x}_0$ be the initial and $\vec{x}_1$ be the terminal endpoints.
+            \[
+                \mlet\quad \Gamma = \Gamma_1 \cup \Gamma_2^-\footnote{$\Gamma_2$ in the opposite direction}
+            \]
+            Therefore, $\Gamma$ is a closed path with initial and terminal points at $X_0$  (or $X_1$), but from $(1)$
+            we have
+            \[
+                \int_\Gamma \vec{F} \cdot \ddns\vec{\gamma} = 0
+            \]
+            and since $\Gamma = \Gamma_1 \cup \Gamma_2^-$
+            \begin{eqnarray*}
+                \int_\Gamma \vec{F} \cdot \ddns\vec{\gamma} &=& \int_{\Gamma_1} \vec{F} \cdot \ddns\vec{\gamma} + \int_{\Gamma_2^-} \vec{F} \cdot \ddns\vec{\gamma} \\
+                \int_{\Gamma_1} \vec{F} \cdot \ddns\vec{\gamma} + \int_{\Gamma_2^-} \vec{F} \cdot \ddns\vec{\gamma} &=& 0 \\
+                \int_{\Gamma_1} \vec{F} \cdot \ddns\vec{\gamma} - \int_{\Gamma_2} \vec{F} \cdot \ddns\vec{\gamma} &=& 0 \\
+                \int_{\Gamma_1} \vec{F} \cdot \ddns\vec{\gamma} &=& \int_{\Gamma_2} \vec{F} \cdot \ddns\vec{\gamma}
+            \end{eqnarray*}
+            Therefore, the vector line integral is independent of the path and $\vec{F}$ is a conservative vector field.
+            
+        \item[$(2)\implies(1)$]
+            Let $\vec{\Gamma}$ be a closed path in $\domain$. Let $\vec{\Gamma}$'s initial and terminal point be $\vec{x}_0$, for some $\vec{x}_0 \in \domain
+            \subset \real^n$.\\*
+            But from $(2)$, $\vec{F}$ is conservative, and hence the line integral is independent of the path:
+            \begin{eqnarray*}
+                \int_\Gamma \vec{F} \cdot \vec{\gamma} &=& \int_{\Gamma^-} \vec{F} \cdot \vec{\gamma} \\
+                \int_\Gamma \vec{F} \cdot \vec{\gamma} &=& -\int_\Gamma \vec{F} \cdot \vec{\gamma} \\
+                2\int_\Gamma \vec{F} \cdot \vec{\gamma} &=& 0 \\
+                \therefore \int_\Gamma \vec{F} \cdot \vec{\gamma} &=& 0
+            \end{eqnarray*}
+    \end{trivlist}
+\end{proofenv}
+
+\begin{theorem}[Fundamental Theorem of Vector Calculus]\label{thm:1-4}
+    Let $\vec{F}$ be a continuous vector field on some domain $\domain \subset \real^n$. If $\vec{F}$ is a gradient
+    vector field\footnote{i.e. $\vec{F} = \nabla\phi$ for some $\phi$} with a potential function $\phi$ then
+    \[
+        \int_\Gamma \vec{F} \cdot \vec{\gamma} = \phi(x_1) - \phi(x_0)
+    \]
+    where $x_1,x_0 \in \Gamma \subset \domain$ with initial point at $x_0$ and terminal point at $x_1$.
+\end{theorem}
+
+\begin{proofenv} \autoref{thm:1-4}\\*
+    Let $\vec{\gamma}(t) \colon [a,b] \to \real^n \quad a,b \in \domain$ be an orientation-preserving parametrisation of the path, $\vec{\Gamma}$.\\*
+    Then $\vec{\gamma}(a) = x_0$, the initial point and $\vec{\gamma}(b) = x_1$, the terminal point.\\*
+    Let $\phi$ be the potential function of $\vec{F}$ (i.e. $\vec{F}=\nabla\phi$)\\*
+    Let $h(t) = \phi(\vec{\gamma}(t))$\\*
+    Then $h^\prime(t) = \left( \phi^\prime(\vec{\gamma}(t)) \right)^\top\vecprime{\gamma}(t)$
+    \begin{asidebox}
+	$\phi^\prime(\vec{\gamma}(t))$ must be a row vector and $\vecprime{\gamma}(t)$ must be a column.
+    \end{asidebox}
+    Which gives us:
+    \[
+	h^\prime(t) = \nabla\phi(\vec{\gamma}(t))\cdot\vecprime{\gamma}(t)
+    \]
+    
+    Now,
+    \begin{eqnarray*}
+	\int_\Gamma \vec{F} \cdot\ddns\vec{\gamma} &=& \int_a^b \vec{F}(\vec{\gamma}(t)) \cdot \vecprime{\gamma}(t) \dd t\\
+	&=& \int_a^b \nabla\phi(\vec{\gamma}(t))\cdot\vecprime{\gamma}(t) \dd t \qquad \because \vec{F} = \nabla\phi\\
+	&=& \int_a^b h^\prime(t) \dd t \\
+	&=& h(b) - h(a) \qquad \text{(Fundamental Theorem of Calculus)} \\
+	&=& \phi(x_1) - \phi(x_2)
+    \end{eqnarray*}
+\end{proofenv}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
